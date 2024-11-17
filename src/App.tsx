@@ -1,18 +1,14 @@
 import React from "react"
-import { Route, Routes } from "react-router-dom"
-import { Button } from "@mantine/core"
+import { Navigate, Route, Routes } from "react-router-dom"
+import Home from "./pages/home"
+import Project from "./pages/project"
+
 function App() {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <Button>Button</Button>
-          </>
-        }
-      />
-      <Route path="/test" element={<>test</>} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/project/:id" element={<Project />} />
     </Routes>
   )
 }
