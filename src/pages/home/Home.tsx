@@ -67,7 +67,9 @@ const Home = () => {
     <>
       <div className="h-screen w-full dark:bg-black bg-white text-black dark:text-white">
         <div className="flex px-8 py-4 justify-between">
-          <h1>To do flow</h1>
+          <h1 className="bg-gradient-to-r from-purple-500 to-purple-800 bg-clip-text text-transparent font-bold text-2xl">
+            To do flow
+          </h1>
           <button
             onClick={toggleTheme}
             className="inline-flex items-center justify-center rounded-md w-9 h-9 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
@@ -91,14 +93,16 @@ const Home = () => {
                 />{" "}
                 <br />
                 <span>with </span>
-                <span className="text-purple-500">To Do Flow</span>
+                <span className="bg-gradient-to-r from-purple-500 to-purple-800 bg-clip-text text-transparent font-bold">
+                  To Do Flow
+                </span>
               </div>
             </div>
           </div>
         </section>
 
         {/* Replace the existing table section with this */}
-        <div className="px-8 py-4">
+        <div className="py-4 px-8 ">
           <div className="flex justify-between items-center mb-4">
             <h2 className="sm:text-2xl md:text-3xl font-semibold">Projects</h2>
             <button
@@ -110,51 +114,55 @@ const Home = () => {
           </div>
 
           <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Last Updated</TableHead>
-                  <TableHead className="w-[100px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {projects.map((project) => (
-                  <TableRow
-                    key={project.id}
-                    className="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
-                    onClick={(e) => {
-                      // Only navigate if the click wasn't on the delete button cell
-                      if (!(e.target as HTMLElement).closest(".delete-cell")) {
-                        navigate(`/project/${project.id}`)
-                      }
-                    }}
-                  >
-                    <TableCell className="font-medium">
-                      {project.name}
-                    </TableCell>
-                    <TableCell>
-                      {project.createdAt.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      {project.updatedAt.toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="delete-cell">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteProject(project.id)
-                        }}
-                        className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
-                      >
-                        <IconTrash className="h-4 w-4" />
-                      </button>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Created</TableHead>
+                    <TableHead>Last Updated</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow
+                      key={project.id}
+                      className="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                      onClick={(e) => {
+                        // Only navigate if the click wasn't on the delete button cell
+                        if (
+                          !(e.target as HTMLElement).closest(".delete-cell")
+                        ) {
+                          navigate(`/project/${project.id}`)
+                        }
+                      }}
+                    >
+                      <TableCell className="font-medium">
+                        {project.name}
+                      </TableCell>
+                      <TableCell>
+                        {project.createdAt.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {project.updatedAt.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="delete-cell">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDeleteProject(project.id)
+                          }}
+                          className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
+                        >
+                          <IconTrash className="h-4 w-4" />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>
