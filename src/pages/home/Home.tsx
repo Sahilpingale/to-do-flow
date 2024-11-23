@@ -12,7 +12,17 @@ import {
 } from "@mantine/core"
 import { IProject } from "../../models/models"
 import { useNavigate } from "react-router"
-import { IconTrash } from "@tabler/icons-react"
+import { IconTrash, IconSun, IconMoon } from "@tabler/icons-react"
+import { FlipWords } from "../../components/ui/flip-words"
+import { useTheme } from "../../contexts/ThemeProvider"
+import { Switch } from "../../components/ui/switch"
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table"
 
 const getStoredProjects = (): IProject[] => {
   const stored = localStorage.getItem("projects")
@@ -31,6 +41,7 @@ const Home = () => {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const navigate = useNavigate()
   const theme = useMantineTheme()
+  const { toggleTheme } = useTheme()
 
   const handleCreateProject = () => {
     const newProject: IProject = {
@@ -52,86 +63,102 @@ const Home = () => {
     localStorage.setItem("projects", JSON.stringify(updatedProjects))
   }
 
-  const rows = projects.map((project) => (
-    <Table.Tr
-      key={project.name}
-      bg={selectedRows.includes(project.id) ? theme.colors.blue[1] : undefined}
-      onClick={(e) => {
-        if (
-          (e.target instanceof HTMLInputElement &&
-            e.target.type === "checkbox") ||
-          (e.target as HTMLElement)
-            .closest("button")
-            ?.getAttribute("aria-label") === "Delete"
-        ) {
-          return
-        }
-        navigate(`/project/${project.id}`)
-      }}
-    >
-      <Table.Td>
-        <Checkbox
-          aria-label="Select row"
-          checked={selectedRows.includes(project.id)}
-          onChange={(event) =>
-            setSelectedRows(
-              event.currentTarget.checked
-                ? [...selectedRows, project.id]
-                : selectedRows.filter((id) => id !== project.id)
-            )
-          }
-        />
-      </Table.Td>
-      <Table.Td>{project.name}</Table.Td>
-      <Table.Td>{project.createdAt.toLocaleDateString()}</Table.Td>
-      <Table.Td>{project.updatedAt.toLocaleDateString()}</Table.Td>
-      <Table.Td>{project.tasks.length}</Table.Td>
-      <Table.Td>
-        <ActionIcon
-          aria-label="Delete"
-          color="red"
-          size="md"
-          onClick={() => handleDeleteProject(project.id)}
-        >
-          <IconTrash />
-        </ActionIcon>
-      </Table.Td>
-    </Table.Tr>
-  ))
-
   return (
-    <AppShell header={{ height: 60 }} padding="md">
-      <AppShell.Header>
-        <Group h="100%" px="md">
-          <Title order={1}>To Do Flow</Title>
-        </Group>
-      </AppShell.Header>
+    <>
+      <div className="h-screen w-full dark:bg-black bg-white text-black dark:text-white">
+        <div className="flex px-8 py-4 justify-between">
+          <h1>To do flow</h1>
+          <button
+            onClick={toggleTheme}
+            className="inline-flex items-center justify-center rounded-md w-9 h-9 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          >
+            <IconSun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <IconMoon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </button>
+        </div>
 
-      <AppShell.Main>
-        <Stack p="xl">
-          <Title order={2} style={{ width: "fit-content" }}>
-            Projects
-          </Title>
-          <Button w="fit-content" onClick={handleCreateProject}>
-            Create Project
-          </Button>
+        <section className="h-[50vh] w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] relative flex items-center justify-center">
+          {/* Radial gradient for the container to give a faded look */}
+          <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+          <div className="text-4xl sm:text-7xl font-bold relative z-20 bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-500 py-8">
+            {/* Flip words */}
+            <div className="h-48 w-full flex justify-center items-center px-2 sm:px-4">
+              <div className="text-2xl sm:text-3xl md:text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400 w-full max-w-md">
+                Manage tasks
+                <FlipWords
+                  words={["effortlessly", "efficiently", "seamlessly"]}
+                />{" "}
+                <br />
+                <span>with </span>
+                <span className="text-purple-500">To Do Flow</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {/* Table of projects */}
-          <Table highlightOnHover verticalSpacing="md">
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Td></Table.Td>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Created At</Table.Th>
-                <Table.Th>Updated At</Table.Th>
-                <Table.Th>Total tasks</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-        </Stack>
-      </AppShell.Main>
-    </AppShell>
+        {/* Replace the existing table section with this */}
+        <div className="px-8 py-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="sm:text-2xl md:text-3xl font-semibold">Projects</h2>
+            <button
+              onClick={handleCreateProject}
+              className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors"
+            >
+              New Project
+            </button>
+          </div>
+
+          <div className="border rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead>Last Updated</TableHead>
+                  <TableHead className="w-[100px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {projects.map((project) => (
+                  <TableRow
+                    key={project.id}
+                    className="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+                    onClick={(e) => {
+                      // Only navigate if the click wasn't on the delete button cell
+                      if (!(e.target as HTMLElement).closest(".delete-cell")) {
+                        navigate(`/project/${project.id}`)
+                      }
+                    }}
+                  >
+                    <TableCell className="font-medium">
+                      {project.name}
+                    </TableCell>
+                    <TableCell>
+                      {project.createdAt.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>
+                      {project.updatedAt.toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="delete-cell">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteProject(project.id)
+                        }}
+                        className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
+                      >
+                        <IconTrash className="h-4 w-4" />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root[class~="dark"] {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -62,6 +62,8 @@
 @layer base {
   * {
     @apply border-border;
+    /* font-family: ; */
+    background-color: var(--background);
   }
   body {
     @apply bg-background text-foreground;
