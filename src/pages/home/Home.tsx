@@ -1,22 +1,11 @@
 import React, { useState } from "react"
-import {
-  ActionIcon,
-  AppShell,
-  Button,
-  Checkbox,
-  Group,
-  Stack,
-  Table,
-  Title,
-  useMantineTheme,
-} from "@mantine/core"
 import { IProject } from "../../models/models"
 import { useNavigate } from "react-router"
 import { IconTrash, IconSun, IconMoon } from "@tabler/icons-react"
 import { FlipWords } from "../../components/ui/flip-words"
 import { useTheme } from "../../contexts/ThemeProvider"
-import { Switch } from "../../components/ui/switch"
 import {
+  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -38,9 +27,7 @@ const getStoredProjects = (): IProject[] => {
 
 const Home = () => {
   const [projects, setProjects] = useState<IProject[]>(getStoredProjects())
-  const [selectedRows, setSelectedRows] = useState<string[]>([])
   const navigate = useNavigate()
-  const theme = useMantineTheme()
   const { toggleTheme } = useTheme()
 
   const handleCreateProject = () => {

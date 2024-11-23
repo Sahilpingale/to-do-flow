@@ -4,8 +4,6 @@ import "./index.css"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { HashRouter } from "react-router-dom"
-import { MantineProvider } from "@mantine/core"
-import "@mantine/core/styles.css"
 import { ReactFlowProvider } from "@xyflow/react"
 import { ThemeProvider } from "./contexts/ThemeProvider"
 
@@ -13,13 +11,11 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <MantineProvider>
-        <ThemeProvider>
-          <ReactFlowProvider>
-            <App />
-          </ReactFlowProvider>
-        </ThemeProvider>
-      </MantineProvider>
+      <ThemeProvider>
+        <ReactFlowProvider>
+          <App />
+        </ReactFlowProvider>
+      </ThemeProvider>
     </HashRouter>
   </React.StrictMode>
 )
